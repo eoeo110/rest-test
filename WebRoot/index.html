@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>A Sample</title>
+</head>
+<body>
+        <div id="test-content"></div>
+        <button id="get-test">GET TEST</button>
+        <button id="post-test">POST TEST</button>
+        <button id="delete-test">DELETE TEST</button>
+        <button id="put-test">PUT TEST</button>
+
+		<fieldset>
+			<legend>创建表--测试</legend>
+			<table width="50%" height="50%">
+				<colgroup>
+					<col width="40%" ></col>
+					<col width="40%" ></col>
+				</colgroup>
+				<tr>
+					<td>名称: </td>
+					<td><input type="text" id="createbd_clsname" value="表单1" /></td>
+				</tr>
+				<tr>
+					<td>表模式:</td>
+					<td><input type="text" id="createbd_tableSchema" value="MW_SYS" /></td>
+				</tr>
+				<tr>
+					<td>数据表（建议长度小于18）: </td>
+					<td><input type="text" id="createbd_tableName" value="test1" /></td>
+				</tr>
+				<tr>
+					<td>表空间: </td>
+					<td><input type="text" id="createbd_tableSpace" value="MWS_SYS" /></td>
+				</tr>
+				
+				<tr>
+					<td>是否结构对象</td>
+					<td><input type="checkbox" id="createbd_isStructureFlag"  checked="true" /></td>
+				</tr>
+				
+			</table>
+			
+			
+			
+		</fieldset>
+
+		<input type="text" id="input-text"/>
+</body>
+<script type="text/javascript" src="./js/jquery-1.9.1.js"></script>
+
+<script type="text/javascript">
+
+
+        $(document).ready(function() {
+                initButtons();
+        });
+
+        function initButtons() {
+                $("#get-test").click(testGET);
+                $("#post-test").click(testPOST);
+                $("#delete-test").click(testDELETE);
+                $("#put-test").click(testPUT);
+
+				
+        }
+
+        function testGET() {
+			var p_value=$("#input-text")[0].value;
+                $.ajax({
+                        type : "GET",
+                        dataType : "text",
+                        url : "demo/xml/"+p_value,
+                        success : function(data) {
+                                setContent(data);
+                        }
+                });
+        }
+
+        function testPOST() {
+			//var jsontest="{\"city\":\"Beijing222\",\"street\":\" Chaoyang Road \",\"postcode\":100025}";
+			var jsontest2="{ \"newbd\": { \"cls_name\": \"表单1\", \"tableSchema\":\"MW_SYS\", \"tableName\": \"test1\",\"tableSpace\":\"MWS_SYS\",\"isStructureFlag\":\"true\" }} ";
+			//"{\"cls_name\":\"表单1\",\"tableSchema\":\"MW_SYS\",\"tableName\":\"test1\",\"tableSpace\":\"MWS_SYS\",\"isStructureFlag\":\"true\"}";
+
+                $.ajax({
+                        contentType : "application/json; charset=utf-8",
+                        type : "POST",
+                        dataType : "text",
+                        url : "demo/ObjectModelService",
+                        data : jsontest2,
+                        success : function(data) {
+                                setContent(data);
+                        }
+                });
+        }
+
+        function testPUT() {
+                $.ajax({
+                        type : "PUT",
+                        url : "demo/Simple",
+                        data : {
+                                id : 'test'
+                        },
+                        success : function(data) {
+                                setContent(data);
+                        }
+                });
+        }
+
+        function testDELETE() {
+                $.ajax({
+                        type : "DELETE",
+                        dataType : "text",
+                        url : "demo/Simple/walle",
+                        success : function(data) {
+                                setContent(data);
+                        }
+                });
+        }
+
+        function setContent(content) {
+                $("#test-content").text(content);
+        }
+</script>
+</html>
